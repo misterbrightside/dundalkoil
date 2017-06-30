@@ -24,5 +24,10 @@ namespace DundalkOil
         {
             InitializeComponent();
         }
+
+        private void OnClickSelectFileButton(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("You clicked me!");
+        }
     }
 }

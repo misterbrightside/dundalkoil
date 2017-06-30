@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DundalkOil"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow"
+        Height="474.228"
+        Width="895.166"
+        ResizeMode="CanMinimize"
+        Icon="./dundalk-oil-icon.ico">
+    <Grid Margin="0,0,22,18">
+        <TextBlock Margin="60,97,459,301"><Run Text="Data Folder:" Typography.Variants="Subscript"/></TextBlock>
+        <Button Content="Select File" Click="OnClickSelectFileButton" Margin="642,86,52,301" />
+        <Button Content="Select File" Click="OnClickSelectFileButton" Margin="642,153,52,229" />
+        <TextBlock Margin="60,167,443,229"><Run Text="Skip List:" Typography.Variants="Subscript"/></TextBlock>
+        <TextBlock Margin="60,246,443,147"><Run Text="Upload URL:" Typography.Variants="Subscript"/></TextBlock>
+        <Button Content="Upload" Click="OnClickSelectFileButton" Margin="287,374,293,10" />
     </Grid>
 </Window>
