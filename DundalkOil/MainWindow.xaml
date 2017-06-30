@@ -26,8 +26,8 @@
                 <Run Text="Upload URL:" Typography.Variants="Subscript"/>
             </Bold>
         </Label>
-        <TextBox Name="urlUploadLink" Margin="212,274,219,145"/>
-        <Button Content="Upload" Click="Button_Click" Margin="356,374,335,30" />
+        <TextBox TextChanged="SetURL" Name="urlUploadLink" Margin="212,274,219,145"/>
+        <Button Content="Upload" Click="UploadFiles" Margin="356,374,335,30" />
         <Label Margin="60,137,600,276">
             <Bold>
                 <Run Text="Data Folder:" Typography.Variants="Subscript"/>

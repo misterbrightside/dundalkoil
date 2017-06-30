@@ -7,6 +7,10 @@ namespace DundalkOil
 {
     public partial class MainWindow : Window
     {
+        private string url;
+        private string[] files;
+        private string skipFilePath;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -14,23 +18,15 @@ namespace DundalkOil
 
         private void SelectDirectoryDataFolder(object sender, RoutedEventArgs e)
         {
-            /* FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-             DialogResult folder = folderBrowserDialog.ShowDialog();
-             if (!String.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
-             {
-                 dataFolderName.Text = folderBrowserDialog.SelectedPath;
-
-             }*/
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.Filter = "Excel |*.xlsx";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (openFileDialog.ShowDialog() == true)
             {
-                string[] files = openFileDialog.FileNames;
+                this.files = openFileDialog.FileNames;
                 dataFolderName.Text = Path.GetDirectoryName(files[0]);
             }
-
         }
 
         private void SelectSkipFile(object sender, RoutedEventArgs e)
@@ -41,12 +37,18 @@ namespace DundalkOil
             if (openFileDialog.ShowDialog() == true)
             {
                 skipListFileName.Text = openFileDialog.FileName;
+                this.skipFilePath = openFileDialog.FileName;
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void UploadFiles(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show(this.url + " " + this.skipFilePath + " " + this.files.ToString());
+        }
 
+        private void SetURL(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            this.url = urlUploadLink.Text;
         }
     }
 }
