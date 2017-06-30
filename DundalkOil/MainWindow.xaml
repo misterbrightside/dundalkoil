@@ -10,26 +10,28 @@
         Width="900"
         ResizeMode="CanMinimize"
         Icon="./static/dundalk-oil-icon.ico">
-    <Grid Margin="0,0,-6,18">
+    <Grid Margin="0,0,-6,18" RenderTransformOrigin="0.446,0.4">
         <Image Source="./static/dundalk-oil-banner.png" Margin="267,26,267,353"/>
-        <Label Margin="60,137,600,276">
-            <Bold>
-                <Run Text="Data Folder:" Typography.Variants="Subscript"/>
-            </Bold>
-        </Label>
-        <Button Content="Select File" Click="OnClickSelectFileButton" Margin="698,130,52,283" />
-        <Button Content="Select File" Click="OnClickSelectFileButton" Margin="698,197,52,216" />
+        <TextBlock Name="dataFolderName" Margin="212,137,252,283"></TextBlock>
+        <Button Content="Select File" Click="SelectDirectoryDataFolder" Margin="698,130,52,283" />
+        <Button Content="Select File" Click="SelectSkipFile" Margin="698,197,52,216" />
         <Label Margin="60,204,628,179">
             <Bold>
                 <Run Text="Skip List:" Typography.Variants="Subscript"/>
             </Bold>
         </Label>
+        <TextBlock Name="skipListFileName" Margin="212,197,252,223"></TextBlock>
         <Label Margin="60,274,714,119" Target="{Binding ElementName=urlUploadLink}">
             <Bold>
                 <Run Text="Upload URL:" Typography.Variants="Subscript"/>
             </Bold>
         </Label>
         <TextBox Name="urlUploadLink" Margin="212,274,219,145"/>
-        <Button Content="Upload" Click="OnClickSelectFileButton" Margin="356,374,335,30" />
+        <Button Content="Upload" Click="Button_Click" Margin="356,374,335,30" />
+        <Label Margin="60,137,600,276">
+            <Bold>
+                <Run Text="Data Folder:" Typography.Variants="Subscript"/>
+            </Bold>
+        </Label>
     </Grid>
 </Window>

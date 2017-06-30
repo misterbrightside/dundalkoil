@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
 
 namespace DundalkOil
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -25,9 +12,41 @@ namespace DundalkOil
             InitializeComponent();
         }
 
-        private void OnClickSelectFileButton(object sender, RoutedEventArgs e)
+        private void SelectDirectoryDataFolder(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("You clicked me!");
+            /* FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+             DialogResult folder = folderBrowserDialog.ShowDialog();
+             if (!String.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+             {
+                 dataFolderName.Text = folderBrowserDialog.SelectedPath;
+
+             }*/
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "Excel |*.xlsx";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string[] files = openFileDialog.FileNames;
+                dataFolderName.Text = Path.GetDirectoryName(files[0]);
+            }
+
+        }
+
+        private void SelectSkipFile(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (openFileDialog.ShowDialog() == true)
+            {
+                skipListFileName.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
