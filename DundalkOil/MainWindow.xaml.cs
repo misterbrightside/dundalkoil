@@ -43,7 +43,7 @@ namespace DundalkOil
 
         private void UploadFiles(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(this.url + " " + this.skipFilePath + " " + this.files.ToString());
+            Uploader uploader = new Uploader(this.url, this.skipFilePath, this.files);
         }
 
         private void SetURL(object sender, System.Windows.Controls.TextChangedEventArgs e)
