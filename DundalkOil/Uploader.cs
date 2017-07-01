@@ -1,22 +1,24 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using Excel = Microsoft.Office.Interop.Excel;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace DundalkOil
 {
     class Uploader
     {
-        private string debtorAllocFile;
-        private string debtorEntryFile;
-        private string saleDocFile;
-        private string saleDocItemsFile;
-        private string traderFile;
+        private Excel.Application excelApplication;
+        private Excel.Workbook debtorAllocFile;
+        private Excel.Workbook debtorEntryFile;
+        private Excel.Workbook saleDocFile;
+        private Excel.Workbook saleDocItemsFile;
+        private Excel.Workbook traderFile;
         private string url;
         private string skipFilePath;
 
         public Uploader(string url, string skipFilePath, string[] files)
         {
-            //.excelApplication = new Application();
+            this.excelApplication = new Excel.Application();
             OpenExcelFiles(files);
             this.url = url;
             this.skipFilePath = skipFilePath;
@@ -24,17 +26,24 @@ namespace DundalkOil
 
         void OpenExcelFiles(string[] files)
         {
-            this.debtorAllocFile = GetFileName(files, "DebtorAlloc.xlsx");
-            this.debtorEntryFile = GetFileName(files, "DebtorEntry.xlsx");
-            this.saleDocFile = GetFileName(files, "SaleDoc.xlsx");
-            this.saleDocItemsFile = GetFileName(files, "SaleDocItem.xlsx");
-            this.traderFile = GetFileName(files, "Trader.xlsx");
-            MessageBox.Show(this.debtorAllocFile + " " + this.debtorEntryFile + " " + this.saleDocFile + " " + this.saleDocItemsFile + " " + this.traderFile);
+            this.debtorAllocFile = this.excelApplication.Workbooks.Open(@GetFileName(files, "DebtorAlloc.xlsx"));
+            this.debtorEntryFile = this.excelApplication.Workbooks.Open(@GetFileName(files, "DebtorEntry.xlsx"));
+            this.saleDocFile = this.excelApplication.Workbooks.Open(@GetFileName(files, "SaleDoc.xlsx"));
+            this.saleDocItemsFile = this.excelApplication.Workbooks.Open(@GetFileName(files, "SaleDocItem.xlsx"));
+            this.traderFile = this.excelApplication.Workbooks.Open(@GetFileName(files, "Trader.xlsx"));
         }
 
         private string GetFileName(string[] filenames, string filetype)
         {
             return Array.Find(filenames, f => f.Contains(filetype));
+        }
+
+        public void CleanUp()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            excelApplication.Quit();
+            Marshal.ReleaseComObject(excelApplication);
         }
     }
 }
