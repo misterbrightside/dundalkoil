@@ -14,14 +14,14 @@ namespace DundalkOil
         private Excel.Workbook saleDocItemsFile;
         private Excel.Workbook traderFile;
         private string url;
-        private string skipFilePath;
+        private SkipList skipFilePath;
 
         public Uploader(string url, string skipFilePath, string[] files)
         {
             this.excelApplication = new Excel.Application();
             OpenExcelFiles(files);
             this.url = url;
-            this.skipFilePath = skipFilePath;
+            this.skipFilePath = new SkipList(skipFilePath);
         }
 
         void OpenExcelFiles(string[] files)
