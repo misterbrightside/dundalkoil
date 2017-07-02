@@ -72,7 +72,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DocItem.cs" />
     <Compile Include="ExcelFile.cs" />
+    <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceSorter.cs" />
     <Compile Include="SkipList.cs" />
     <Compile Include="Uploader.cs" />

@@ -45,27 +45,56 @@ namespace DundalkOil
             return @Array.Find(filenames, f => f.Contains(filetype));
         }
 
-        public Dictionary<String, Dictionary<String, String>> GetData()
+        public Dictionary<String, Invoice> GetData()
         {
-            Dictionary<String, Dictionary<String, String>> result = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<String, Invoice> result = new Dictionary<string, Invoice>();
 
             var invoiceRows = this.saleDocFile.RowCount();
             var saleDocData = GetDataArray(this.saleDocFile);
+            string[] fields = { "ID", "ACCIDDEBTOR", "CUSTOMERID", "CUSTOMERTEXT", "DELIVERYTEXT", "DESCRIPTION", "DUEDATE", "NUMBER", "POSTDATE", "REMARKS", "CONSIGNEEID", "CONSIGNEETEXT", "REFERENCE" };
             for (int i = 1; i < invoiceRows; i++)
             {
-                var values = new Dictionary<String, String>();
-                values["CUSTOMERID"] = saleDocData[i, this.saleDocFile.Headers()["CUSTOMERID"]].ToString();
-
-                result[saleDocData[i, this.saleDocFile.Headers()["ID"]].ToString()] = values;
+                Invoice invoice = new Invoice();
+                foreach (string field in fields)
+                {
+                    invoice.Set(field, GetValues(i, saleDocData, this.saleDocFile, field));
+                }
+                if (!skipList.HasID(invoice.GetID()))
+                {
+                    result[invoice.GetID()] = invoice;
+                }
             }
+            saleDocData = null;
 
             var saleDocItemsData = GetDataArray(this.saleDocItemsFile);
-            var debtorAllocData = GetDataArray(this.debtorAllocFile);
-            var debtorEntryData = GetDataArray(this.debtorEntryFile);
-            var traderData = GetDataArray(this.traderFile);
-
+            int saleDocItemsRows = this.saleDocItemsFile.RowCount();
+            string[] saleDocItemsFields = {"ID", "ACCIDSALES", "CODE", "DISCOUNTRATE", "FRGAMOUNTVATEXC", "FRGCOSTAMOUNT", "FRGBMUCOSTPRICE", "FRGDISCOUNTAMOUNT", "FRGSALEPRICE", "FRGVATAMOUNT", "LOCATIONID", "NUMBERBYORDER", "SALEDOCID", "SALEPRODUCTID", "VATID", "QUANTITY", "QTYDELIVERED", "QTYWEIGHED", "QTYORDERED", "NAME", "FRGSALEPRICEVATINC", "FRGDISCOUNTAMOUNTVATINC", "BMUQUANTITY", "FRGBMUSALEPRICE", "FRGBMUSALEPRICEVATINC", "R$POSTDATE", "NETWEIGHTKG"};
+            for (int i = 1; i < saleDocItemsRows; i++)
+            {
+                string id = saleDocItemsData[i, this.saleDocItemsFile.Headers()["SALEDOCID"]].ToString();
+                Invoice invoice;
+                if (result.TryGetValue(id, out invoice))
+                {
+                    DocItem item = new DocItem();
+                    foreach (string field in saleDocItemsFields)
+                    {
+                        item.Set(field, GetValues(i, saleDocItemsData, this.saleDocItemsFile, field));
+                    }
+                    invoice.AddItem(item);
+                }
+            }
+            saleDocItemsData = null;
+            //var debtorAllocData = GetDataArray(this.debtorAllocFile);
+            //var debtorEntryData = GetDataArray(this.debtorEntryFile);
+            //var traderData = GetDataArray(this.traderFile);
 
             return result;
+        }
+
+        String GetValues(int index, object[,] data, ExcelFile file, string columnName)
+        {
+            object value = data[index, file.Headers()[columnName]];
+            return value != null ? value.ToString() : "";
         }
     
         public object[,] GetDataArray(ExcelFile file)
