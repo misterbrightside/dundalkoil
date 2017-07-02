@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace DundalkOil
 {
@@ -48,6 +49,7 @@ namespace DundalkOil
         public Dictionary<String, Invoice> GetData()
         {
             Dictionary<String, Invoice> result = new Dictionary<string, Invoice>();
+            Dictionary<String, ArrayList> customerIdsToInvoiceIds = new Dictionary<string, ArrayList>();
 
             var invoiceRows = this.saleDocFile.RowCount();
             var saleDocData = GetDataArray(this.saleDocFile);
@@ -62,6 +64,17 @@ namespace DundalkOil
                 if (!skipList.HasID(invoice.GetID()))
                 {
                     result[invoice.GetID()] = invoice;
+                    ArrayList invoices;
+                    if (!customerIdsToInvoiceIds.TryGetValue(invoice.GetCustomerID(), out invoices))
+                    {
+                        ArrayList list = new ArrayList();
+                        list.Add(invoice.GetID());
+                        customerIdsToInvoiceIds[invoice.GetCustomerID()] = list;
+                    }
+                    else
+                    {
+                        invoices.Add(invoice.GetID());
+                    }
                 }
             }
             saleDocData = null;
@@ -84,9 +97,20 @@ namespace DundalkOil
                 }
             }
             saleDocItemsData = null;
+
+            var traderData = GetDataArray(this.traderFile);
+            int tradeDataRows = this.traderFile.RowCount();
+            string[] tradeFields = {"ID", "ADDRLINE01", "ADDRLINE02", "ADDRLINE03", "ADDRLINE04", "ADDRLINE05", "ADDRLINE06", "CODE", "CONTACTEMAIL", "CONTACTNAME", "NAME","ADDRPOSTALCODE"};
+            for (int i = 1; i < tradeDataRows; i++)
+            {
+                Customer customer = new Customer();
+                foreach (string field in tradeFields)
+                {
+
+                }
+            }
             //var debtorAllocData = GetDataArray(this.debtorAllocFile);
             //var debtorEntryData = GetDataArray(this.debtorEntryFile);
-            //var traderData = GetDataArray(this.traderFile);
 
             return result;
         }

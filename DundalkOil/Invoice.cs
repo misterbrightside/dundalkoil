@@ -29,5 +29,10 @@ namespace DundalkOil
         {
             return this.saleDoc["ID"];
         }
+
+        public string GetCustomerID()
+        {
+            return this.saleDoc["CUSTOMERID"];
+        }
     }
 }
