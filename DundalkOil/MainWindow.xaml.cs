@@ -44,7 +44,6 @@ namespace DundalkOil
         private void UploadFiles(object sender, RoutedEventArgs e)
         {
             Uploader uploader = new Uploader(this.url, this.skipFilePath, this.files);
-            uploader.CleanUp();
         }
 
         private void SetURL(object sender, System.Windows.Controls.TextChangedEventArgs e)
