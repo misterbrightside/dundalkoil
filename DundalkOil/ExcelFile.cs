@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace DundalkOil
 {
@@ -12,22 +13,36 @@ namespace DundalkOil
         private Excel.Application application;
         private Excel.Worksheet worksheet;
         private Dictionary<string, int> headers;
+        private Excel.Range range;
+        private int columnCount;
+        private int rowCount;
 
         public ExcelFile(Excel.Application application, string filename)
         {
             this.application = application;
             this.worksheet = Open(filename);
             this.headers = GetHeaders();
+            this.range = this.worksheet.UsedRange;
+            this.columnCount = this.range.Columns.Count;
+            this.rowCount = this.range.Rows.Count;
         }
 
         public string GetValue(string column, int rowId)
         {
-            return this.worksheet.Cells[rowId, this.headers[column]].Value2.ToString();
+            return this.GetCellValue(rowId, this.headers[column]);
         }
 
         private Excel.Worksheet Open(string filename)
         {
             return this.application.Workbooks.Open(filename).Sheets[1];
+        }
+
+        public string[] GetAllForColumn(string columnName)
+        {
+            int columnIndex = headers[columnName];
+            Excel.Range columnRange = this.range.Columns[columnIndex];
+            Array values = (Array)columnRange.Cells.Value2;
+            return values.OfType<object>().Select(o => o.ToString()).ToArray();
         }
 
         private Dictionary<string, int> GetHeaders()
@@ -43,9 +58,39 @@ namespace DundalkOil
             return headers;
         }
 
+        private string GetCellValue(int rowId, int columnId)
+        {
+            return this.range.Cells[rowId, columnId].Value2.ToString();
+        }
+
         private string HeadersToString()
         {
             return string.Join(";", this.headers.Select(x => x.Key + '=' + x.Value));
+        }
+
+        public int ColumnCount()
+        {
+            return this.columnCount;
+        }
+
+        public int RowCount()
+        {
+            return this.rowCount;
+        }
+
+        public Excel.Range Range()
+        {
+            return this.range;
+        }
+
+        public Excel.Worksheet sheet()
+        {
+            return worksheet;
+        }
+
+        public Dictionary<string, int> Headers()
+        {
+            return headers;
         }
     }
 }
