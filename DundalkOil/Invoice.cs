@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace DundalkOil
@@ -7,17 +8,21 @@ namespace DundalkOil
     class Invoice
     {
         private Dictionary<string, string> saleDoc;
-        private ArrayList items;
+        private List<DocItem> items;
         private ArrayList debtorEntries;
         private Customer customer;
         private ArrayList debtorAllocs;
+        private double total;
+        private double paid;
+        private double amountFree;
 
         public Invoice()
         {
             this.saleDoc = new Dictionary<string, string>();
-            this.items = new ArrayList();
+            this.items = new List<DocItem>();
             this.debtorEntries = new ArrayList();
             this.debtorAllocs = new ArrayList();
+            this.total = 0;
         }
         
         public void Set(string field, string value)
@@ -33,6 +38,7 @@ namespace DundalkOil
         public void AddItem(DocItem item)
         {
             items.Add(item);
+            this.total += item.GetTotalItemCost();
         }
 
         public string GetID()
@@ -53,6 +59,11 @@ namespace DundalkOil
         public void AddDebtorAlloc(DebtorAlloc debtorAlloc)
         {
             debtorAllocs.Add(debtorAlloc);
+        }
+
+        public double Total()
+        {
+            return this.total;
         }
     }
 }
