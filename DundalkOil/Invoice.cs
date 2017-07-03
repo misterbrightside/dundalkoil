@@ -8,16 +8,24 @@ namespace DundalkOil
     {
         private Dictionary<string, string> saleDoc;
         private ArrayList items;
+        private ArrayList debtorEntries;
+        private Customer customer;
 
         public Invoice()
         {
             this.saleDoc = new Dictionary<string, string>();
             this.items = new ArrayList();
+            this.debtorEntries = new ArrayList();
         }
         
         public void Set(string field, string value)
         {
             this.saleDoc[field] = value;
+        }
+
+        public void SetCustomer(Customer customer)
+        {
+            this.customer = customer;
         }
 
         public void AddItem(DocItem item)
@@ -33,6 +41,11 @@ namespace DundalkOil
         public string GetCustomerID()
         {
             return this.saleDoc["CUSTOMERID"];
+        }
+
+        public void AddDebtorEntry(DebtorEntry debtorEntry)
+        {
+            debtorEntries.Add(debtorEntry);
         }
     }
 }

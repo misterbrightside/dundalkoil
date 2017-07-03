@@ -106,11 +106,39 @@ namespace DundalkOil
                 Customer customer = new Customer();
                 foreach (string field in tradeFields)
                 {
+                    customer.Set(field, GetValues(i, traderData, this.traderFile, field));
+                }
 
+                ArrayList invoices;
+                if (customerIdsToInvoiceIds.TryGetValue(customer.GetID(), out invoices))
+                {
+                    foreach (String invoiceId in invoices)
+                    {
+                        result[invoiceId].SetCustomer(customer);
+                    }
                 }
             }
+            traderData = null;
+
+            var debtorEntryData = GetDataArray(this.debtorEntryFile);
+            int debtorEntryRows = this.debtorEntryFile.RowCount();
+            string[] debtoryEntryFields = { "DOCUMENTID", "DOCITEMID", "CUSTOMERID", "CURRENCYID", "DOCKIND", "POSTDATE", "FRGAMOUNT", "R$FRGAMOUNTALLOCATED", "R$FRGAMOUNTFREE", "CONTRACTID", "R$CLOSEDATE", "DUEDATE", "R$DUECLOSEDATE" };
+            for (int i = 1; i < debtorEntryRows; i++)
+            {
+                string id = debtorEntryData[i, this.debtorEntryFile.Headers()["DOCUMENTID"]].ToString();
+                Invoice invoice;
+                if (result.TryGetValue(id, out invoice))
+                {
+                    DebtorEntry debtorEntry = new DebtorEntry();
+                    foreach (string field in debtoryEntryFields)
+                    {
+                        debtorEntry.Set(field, GetValues(i, debtorEntryData, this.debtorEntryFile, field));
+                    }
+                    invoice.AddDebtorEntry(debtorEntry);
+                }
+            }
+            debtorEntryData = null;
             //var debtorAllocData = GetDataArray(this.debtorAllocFile);
-            //var debtorEntryData = GetDataArray(this.debtorEntryFile);
 
             return result;
         }

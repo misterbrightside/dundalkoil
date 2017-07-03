@@ -15,5 +15,10 @@ namespace DundalkOil
         {
             this.customerFields[field] = value;
         }
+
+        public string GetID()
+        {
+            return this.customerFields["ID"];
+        }
     }
 }
