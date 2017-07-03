@@ -15,6 +15,7 @@ namespace DundalkOil
         private double total;
         private double paid;
         private double amountFree;
+        private double amountAllocated;
 
         public Invoice()
         {
@@ -23,6 +24,9 @@ namespace DundalkOil
             this.debtorEntries = new ArrayList();
             this.debtorAllocs = new ArrayList();
             this.total = 0;
+            this.paid = 0;
+            this.amountFree = 0;
+            this.amountAllocated = 0;
         }
         
         public void Set(string field, string value)
@@ -54,16 +58,29 @@ namespace DundalkOil
         public void AddDebtorEntry(DebtorEntry debtorEntry)
         {
             debtorEntries.Add(debtorEntry);
+            amountFree += debtorEntry.GetAmountFree();
+            amountAllocated += debtorEntry.GetAmountAllocated();
         }
 
         public void AddDebtorAlloc(DebtorAlloc debtorAlloc)
         {
             debtorAllocs.Add(debtorAlloc);
+            paid += debtorAlloc.GetPaidAmount();
         }
 
-        public double Total()
+        public double LeftToPay()
         {
-            return this.total;
+            return this.total - this.paid;
+        }
+
+        public bool IsPaid()
+        {
+            return this.amountAllocated == this.total || this.amountFree == this.total;
+        }
+
+        public bool Skip()
+        {
+            return this.LeftToPay() == 0 || this.IsPaid();
         }
     }
 }

@@ -26,12 +26,6 @@ namespace DundalkOil
             this.skipList = skipList;
         }
 
-        public void Test()
-        {
-            var x = GetData();
-            Console.WriteLine(x.Count);
-        }
-
         public void OpenExcelFiles()
         {
             this.debtorAllocFile = new ExcelFile(this.excelApplication, this.GetFile(files, "DebtorAlloc.xlsx"));
@@ -46,7 +40,7 @@ namespace DundalkOil
             return @Array.Find(filenames, f => f.Contains(filetype));
         }
 
-        public Dictionary<String, Invoice> GetData()
+        public Dictionary<String, Invoice> BuildInvoices()
         {
             Dictionary<String, Invoice> result = new Dictionary<string, Invoice>();
             Dictionary<String, ArrayList> customerIdsToInvoiceIds = new Dictionary<string, ArrayList>();
@@ -157,7 +151,8 @@ namespace DundalkOil
                 }
             }
             debtorAllocData = null;
-
+            this.excelApplication.Quit();
+            Marshal.ReleaseComObject(this.excelApplication);
             return result;
         }
 
@@ -177,24 +172,11 @@ namespace DundalkOil
             return data;
         }
 
-        public void BuildInvoices()
-        {
-            string[] saleDocIds = saleDocFile.GetAllForColumn("ID");
-            var idsToProcess = saleDocIds.Where(i => !skipList.HasID(i));
-            var invoices = idsToProcess.Select(i => BuildInvoiceObject(i)).ToArray();
-        }
-
-        public Object BuildInvoiceObject(string id)
-        {
-            return null;
-        }
-
         public void CleanUp()
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            excelApplication.Quit();
-            Marshal.ReleaseComObject(excelApplication);
+
         }
     }
 }

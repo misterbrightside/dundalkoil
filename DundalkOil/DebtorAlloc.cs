@@ -16,5 +16,10 @@ namespace DundalkOil
         {
             this.debtorAllocFields[field] = value;
         }
+
+        public double GetPaidAmount()
+        {
+            return Convert.ToDouble(this.debtorAllocFields["FRGAMOUNT"]);
+        }
     }
 }

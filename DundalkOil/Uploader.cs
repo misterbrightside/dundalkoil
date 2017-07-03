@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace DundalkOil
@@ -18,8 +19,12 @@ namespace DundalkOil
         public void Init()
         {
             this.invoiceSorter.OpenExcelFiles();
-            this.invoiceSorter.Test();
-            this.invoiceSorter.BuildInvoices();
+            Dictionary<string, Invoice> invoices = this.invoiceSorter.BuildInvoices();
+            this.CleanUp();
+            foreach (Invoice invoice in invoices.Values)
+            {
+                Console.WriteLine("is paid: " + invoice.IsPaid() + " left to pay: " + invoice.LeftToPay());
+            }
         }
 
         public void CleanUp()

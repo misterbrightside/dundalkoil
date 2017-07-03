@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DundalkOil
 {
@@ -19,6 +20,16 @@ namespace DundalkOil
         public string GetID()
         {
             return this.debtorEntryFields["ID"];
+        }
+
+        public double GetAmountFree()
+        {
+            return Convert.ToDouble(this.debtorEntryFields["R$FRGAMOUNTFREE"]);
+        }
+
+        public double GetAmountAllocated()
+        {
+            return Convert.ToDouble(this.debtorEntryFields["R$FRGAMOUNTALLOCATED"]);
         }
     }
 }
