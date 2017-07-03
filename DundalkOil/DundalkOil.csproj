@@ -73,6 +73,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Customer.cs" />
+    <Compile Include="DebtorAlloc.cs" />
     <Compile Include="DebtorEntry.cs" />
     <Compile Include="DocItem.cs" />
     <Compile Include="ExcelFile.cs" />

@@ -10,12 +10,14 @@ namespace DundalkOil
         private ArrayList items;
         private ArrayList debtorEntries;
         private Customer customer;
+        private ArrayList debtorAllocs;
 
         public Invoice()
         {
             this.saleDoc = new Dictionary<string, string>();
             this.items = new ArrayList();
             this.debtorEntries = new ArrayList();
+            this.debtorAllocs = new ArrayList();
         }
         
         public void Set(string field, string value)
@@ -46,6 +48,11 @@ namespace DundalkOil
         public void AddDebtorEntry(DebtorEntry debtorEntry)
         {
             debtorEntries.Add(debtorEntry);
+        }
+
+        public void AddDebtorAlloc(DebtorAlloc debtorAlloc)
+        {
+            debtorAllocs.Add(debtorAlloc);
         }
     }
 }

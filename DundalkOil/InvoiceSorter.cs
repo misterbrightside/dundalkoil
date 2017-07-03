@@ -138,7 +138,25 @@ namespace DundalkOil
                 }
             }
             debtorEntryData = null;
-            //var debtorAllocData = GetDataArray(this.debtorAllocFile);
+
+            var debtorAllocData = GetDataArray(this.debtorAllocFile);
+            int debtorAllocRows = this.debtorAllocFile.RowCount();
+            string[] debtorAllocFields = { "DEBITDOCUMENTID", "DEBITDOCITEMID", "CREDITDOCUMENTID", "CREDITDOCITEMID", "FRGAMOUNT" };
+            for (int i = 1; i < debtorAllocRows; i++)
+            {
+                string id = debtorAllocData[i, this.debtorAllocFile.Headers()["DEBITDOCUMENTID"]].ToString();
+                Invoice invoice;
+                if (result.TryGetValue(id, out invoice)) 
+                {
+                    DebtorAlloc debtorAlloc = new DebtorAlloc();
+                    foreach (string field in debtorAllocFields)
+                    {
+                        debtorAlloc.Set(field, GetValues(i, debtorAllocData, this.debtorAllocFile, field));
+                    }
+                    invoice.AddDebtorAlloc(debtorAlloc);
+                }
+            }
+            debtorAllocData = null;
 
             return result;
         }
