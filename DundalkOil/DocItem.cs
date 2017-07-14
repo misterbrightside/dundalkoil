@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
 
 namespace DundalkOil
 {
+    [DataContract]
     class DocItem
     {
+        [DataMember]
         private Dictionary<string, string> itemFields;
 
         public DocItem()

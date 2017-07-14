@@ -26,6 +26,11 @@ namespace DundalkOil
             this.skipList = skipList;
         }
 
+        public void AddIDToSkipFile(string id)
+        {
+            skipList.AddIDToSkip(id);
+        }
+
         public void OpenExcelFiles()
         {
             this.debtorAllocFile = new ExcelFile(this.excelApplication, this.GetFile(files, "DebtorAlloc.xlsx"));
@@ -72,6 +77,7 @@ namespace DundalkOil
                 }
             }
             saleDocData = null;
+            this.saleDocFile.Close();
 
             var saleDocItemsData = GetDataArray(this.saleDocItemsFile);
             int saleDocItemsRows = this.saleDocItemsFile.RowCount();
@@ -91,6 +97,7 @@ namespace DundalkOil
                 }
             }
             saleDocItemsData = null;
+            this.saleDocItemsFile.Close();
 
             var traderData = GetDataArray(this.traderFile);
             int tradeDataRows = this.traderFile.RowCount();
@@ -113,6 +120,7 @@ namespace DundalkOil
                 }
             }
             traderData = null;
+            this.traderFile.Close();
 
             var debtorEntryData = GetDataArray(this.debtorEntryFile);
             int debtorEntryRows = this.debtorEntryFile.RowCount();
@@ -132,6 +140,7 @@ namespace DundalkOil
                 }
             }
             debtorEntryData = null;
+            this.debtorEntryFile.Close();
 
             var debtorAllocData = GetDataArray(this.debtorAllocFile);
             int debtorAllocRows = this.debtorAllocFile.RowCount();
@@ -151,6 +160,7 @@ namespace DundalkOil
                 }
             }
             debtorAllocData = null;
+            this.debtorAllocFile.Close();
             this.excelApplication.Quit();
             Marshal.ReleaseComObject(this.excelApplication);
             return result;
@@ -174,9 +184,9 @@ namespace DundalkOil
 
         public void CleanUp()
         {
+            this.skipList.CleanUp();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
         }
     }
 }

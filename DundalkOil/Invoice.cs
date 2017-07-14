@@ -80,7 +80,7 @@ namespace DundalkOil
 
         public bool Skip()
         {
-            return this.LeftToPay() == 0 || this.IsPaid();
+            return this.LeftToPay() <= 1 || this.IsPaid();
         }
     }
 }

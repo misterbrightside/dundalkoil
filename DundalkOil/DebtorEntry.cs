@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DundalkOil
 {
+    [DataContract]
     class DebtorEntry
     {
+        [DataMember]
         private Dictionary<string, string> debtorEntryFields;
 
         public DebtorEntry()

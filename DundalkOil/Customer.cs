@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DundalkOil
 {
+    [DataContract]
     class Customer
     {
+        [DataMember]
         private Dictionary<string, string> customerFields;
 
         public Customer()

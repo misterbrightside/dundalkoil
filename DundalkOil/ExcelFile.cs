@@ -12,6 +12,7 @@ namespace DundalkOil
     {
         private Excel.Application application;
         private Excel.Worksheet worksheet;
+        private Excel.Workbook workbook;
         private Dictionary<string, int> headers;
         private Excel.Range range;
         private int columnCount;
@@ -34,7 +35,8 @@ namespace DundalkOil
 
         private Excel.Worksheet Open(string filename)
         {
-            return this.application.Workbooks.Open(filename).Sheets[1];
+            this.workbook = this.application.Workbooks.Open(filename);
+            return workbook.Sheets[1];
         }
 
         public string[] GetAllForColumn(string columnName)
@@ -91,6 +93,11 @@ namespace DundalkOil
         public Dictionary<string, int> Headers()
         {
             return headers;
+        }
+
+        public void Close()
+        {
+            this.workbook.Close();
         }
     }
 }
