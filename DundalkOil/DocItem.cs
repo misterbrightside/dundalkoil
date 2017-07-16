@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Runtime.Serialization;
 
 namespace DundalkOil
 {
-    [DataContract]
     class DocItem
     {
-        [DataMember]
+        [JsonProperty]
         private Dictionary<string, string> itemFields;
 
         public DocItem()

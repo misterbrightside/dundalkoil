@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace DundalkOil
 {
-    [DataContract]
     class DebtorEntry
     {
-        [DataMember]
+        [JsonProperty]
         private Dictionary<string, string> debtorEntryFields;
 
         public DebtorEntry()

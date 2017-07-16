@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace DundalkOil
 {
     class DebtorAlloc
     {
+        [JsonProperty]
         private Dictionary<string, string> debtorAllocFields;
 
         public DebtorAlloc()

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
+using System.Globalization;
 
 namespace DundalkOil
 {
@@ -49,10 +50,11 @@ namespace DundalkOil
         {
             Dictionary<String, Invoice> result = new Dictionary<string, Invoice>();
             Dictionary<String, ArrayList> customerIdsToInvoiceIds = new Dictionary<string, ArrayList>();
+            CultureInfo info = new CultureInfo("en-IE");
 
             var invoiceRows = this.saleDocFile.RowCount();
             var saleDocData = GetDataArray(this.saleDocFile);
-            string[] fields = { "ID", "ACCIDDEBTOR", "CUSTOMERID", "CUSTOMERTEXT", "DELIVERYTEXT", "DESCRIPTION", "DUEDATE", "NUMBER", "POSTDATE", "REMARKS", "CONSIGNEEID", "CONSIGNEETEXT", "REFERENCE" };
+            string[] fields = { "ID", "ACCIDDEBTOR", "CUSTOMERID", "CUSTOMERTEXT", "DELIVERYTEXT", "DESCRIPTION", "NUMBER", "REMARKS", "CONSIGNEEID", "CONSIGNEETEXT", "REFERENCE" };
             for (int i = 1; i < invoiceRows; i++)
             {
                 Invoice invoice = new Invoice();
@@ -60,6 +62,9 @@ namespace DundalkOil
                 {
                     invoice.Set(field, GetValues(i, saleDocData, this.saleDocFile, field));
                 }
+                invoice.Set("DUEDATE", GetDataValues(i, saleDocData, this.saleDocFile, "DUEDATE").ToString("d", info));
+                invoice.Set("POSTDATE", GetDataValues(i, saleDocData, this.saleDocFile, "POSTDATE").ToString("d", info));
+
                 if (!skipList.HasID(invoice.GetID()))
                 {
                     result[invoice.GetID()] = invoice;
@@ -171,7 +176,21 @@ namespace DundalkOil
             object value = data[index, file.Headers()[columnName]];
             return value != null ? value.ToString() : "";
         }
-    
+
+        DateTime GetDataValues(int index, object[,] data, ExcelFile file, string columnName)
+        {
+            object valueObject = data[index, file.Headers()[columnName]];
+            if (valueObject != null)
+            {
+                return DateTime.FromOADate((double)valueObject);
+            }
+            else
+            {
+                return DateTime.MinValue;
+            }
+        }
+
+
         public object[,] GetDataArray(ExcelFile file)
         {
             int rows = file.RowCount();

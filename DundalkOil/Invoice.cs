@@ -2,19 +2,30 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using Newtonsoft.Json;
 
 namespace DundalkOil
 {
     class Invoice
     {
+        [JsonProperty]
         private Dictionary<string, string> saleDoc;
+        [JsonProperty]
         private List<DocItem> items;
+        [JsonProperty]
         private ArrayList debtorEntries;
+        [JsonProperty]
         private Customer customer;
+        [JsonProperty]
         private ArrayList debtorAllocs;
+        [JsonProperty]
         private double total;
+        [JsonProperty]
         private double paid;
+        [JsonProperty]
         private double amountFree;
+        [JsonProperty]
         private double amountAllocated;
 
         public Invoice()
@@ -43,6 +54,13 @@ namespace DundalkOil
         {
             items.Add(item);
             this.total += item.GetTotalItemCost();
+        }
+
+        public int getYearPosted()
+        {
+            String date = this.saleDoc["POSTDATE"];
+            String[] values = date.Split('/');
+            return Convert.ToInt32(values[values.Length - 1]);
         }
 
         public string GetID()

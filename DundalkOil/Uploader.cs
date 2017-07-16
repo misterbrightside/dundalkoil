@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace DundalkOil
 {
@@ -14,6 +15,7 @@ namespace DundalkOil
         private InvoiceSorter invoiceSorter;
         private MemoryStream memoryStream;
         private DataContractJsonSerializer jsonSerializer;
+        private static readonly HttpClient client = new HttpClient();
 
         public Uploader(string url, string skipFilePath, string[] files)
         {
@@ -29,9 +31,10 @@ namespace DundalkOil
             Dictionary<string, Invoice> invoices = this.invoiceSorter.BuildInvoices();
 
             List<String> jsonInvoices = new List<String>(invoices.Count);
+            DateTime thisYear = DateTime.Now;
             foreach (Invoice invoice in invoices.Values)
             {
-                if (invoice.Skip())
+                if (invoice.Skip() || invoice.getYearPosted() < thisYear.Year - 2)
                 {
                     invoiceSorter.AddIDToSkipFile(invoice.GetID());
                 }
@@ -42,7 +45,8 @@ namespace DundalkOil
                 }
             }
             this.CleanUp();
-            System.IO.File.WriteAllLines("results.txt", jsonInvoices.Select(json => json));
+
+            //var content = await client.PostAsync(this.url + "wp-json/beakon-invoices/v1/invoices");
         }
 
         public void CleanUp()

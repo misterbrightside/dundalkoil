@@ -1,27 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace DundalkOil
 {
-    [DataContract]
     class Customer
     {
-        [DataMember]
-        private Dictionary<string, string> customerFields;
+        [JsonProperty]
+        private Dictionary<string, string> customer;
 
         public Customer()
         {
-            customerFields = new Dictionary<string, string>();
+            customer = new Dictionary<string, string>();
         }
 
         public void Set(string field, string value)
         {
-            this.customerFields[field] = value;
+            this.customer[field] = value;
         }
 
         public string GetID()
         {
-            return this.customerFields["ID"];
+            return this.customer["ID"];
         }
     }
 }
